@@ -19,11 +19,10 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bPY-Jj-8ip">
-                                <rect key="frame" x="101" y="396" width="118" height="72"/>
+                                <rect key="frame" x="109" y="396" width="102" height="72"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="50"/>
-                                <state key="normal" title="Start!"/>
+                                <state key="normal" title="Next"/>
                                 <connections>
-                                    <action selector="start_button:" destination="BYZ-38-t0r" eventType="touchDown" id="pvg-tc-Dti"/>
                                     <segue destination="Fp8-Zd-TjC" kind="show" id="EEb-7j-TNV"/>
                                 </connections>
                             </button>
@@ -74,9 +73,6 @@
                             </label>
                             <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="V1e-uZ-AZl">
                                 <rect key="frame" x="255" y="300" width="51" height="31"/>
-                                <connections>
-                                    <action selector="left_button:" destination="BYZ-38-t0r" eventType="valueChanged" id="qYu-IU-K87"/>
-                                </connections>
                             </switch>
                             <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" image="EMCS_logo" translatesAutoresizingMaskIntoConstraints="NO" id="F1a-FW-FDZ">
                                 <rect key="frame" x="110" y="28" width="100" height="30"/>
@@ -159,7 +155,7 @@
                     </view>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
                     <connections>
-                        <outlet property="left_button" destination="V1e-uZ-AZl" id="Lv2-Fh-lNm"/>
+                        <outlet property="left_handed" destination="V1e-uZ-AZl" id="5JL-28-8ss"/>
                         <outlet property="student_department" destination="SdN-gF-r4L" id="tQe-bd-pWn"/>
                         <outlet property="student_lecture" destination="Mdp-NQ-iOu" id="fVr-qE-fWw"/>
                         <outlet property="student_name" destination="AQ7-Jj-1L1" id="lmE-ls-Jvr"/>
@@ -204,9 +200,19 @@
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Zoq-5S-p8K">
+                                <rect key="frame" x="79" y="112" width="163" height="72"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="50"/>
+                                <state key="normal" title="Ready?"/>
+                                <connections>
+                                    <action selector="start_button:" destination="Fp8-Zd-TjC" eventType="touchDown" id="dT1-bg-Fan"/>
+                                    <action selector="x_button:" destination="Fp8-Zd-TjC" eventType="touchDown" id="62o-Zv-jF5"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="Zbv-oc-bOE" firstAttribute="top" secondItem="Zoq-5S-p8K" secondAttribute="bottom" constant="70" id="Bdn-4e-5r8"/>
                             <constraint firstItem="51x-NK-ihn" firstAttribute="height" secondItem="juP-hS-EV7" secondAttribute="height" id="Bz6-Cd-7YU"/>
                             <constraint firstAttribute="trailingMargin" secondItem="51x-NK-ihn" secondAttribute="trailing" id="FzI-GS-dGp"/>
                             <constraint firstItem="51x-NK-ihn" firstAttribute="width" secondItem="juP-hS-EV7" secondAttribute="width" id="Z7T-xS-dUs"/>
@@ -215,12 +221,16 @@
                             <constraint firstItem="juP-hS-EV7" firstAttribute="leading" secondItem="Ho9-BY-LWI" secondAttribute="leadingMargin" id="qbV-ft-77O"/>
                             <constraint firstItem="juP-hS-EV7" firstAttribute="centerY" secondItem="Ho9-BY-LWI" secondAttribute="centerY" id="taR-be-8l5"/>
                             <constraint firstItem="Zbv-oc-bOE" firstAttribute="centerX" secondItem="Ho9-BY-LWI" secondAttribute="centerX" id="v39-Qk-JXk"/>
+                            <constraint firstItem="Zoq-5S-p8K" firstAttribute="centerX" secondItem="Zbv-oc-bOE" secondAttribute="centerX" id="yly-zK-o14"/>
                             <constraint firstItem="Zbv-oc-bOE" firstAttribute="centerY" secondItem="Ho9-BY-LWI" secondAttribute="centerY" id="znN-XX-wDw"/>
                         </constraints>
                     </view>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
                     <connections>
                         <outlet property="label_text" destination="Zbv-oc-bOE" id="NAd-Wv-Fjt"/>
+                        <outlet property="o_button" destination="51x-NK-ihn" id="bdF-C9-ZEZ"/>
+                        <outlet property="start_button" destination="Zoq-5S-p8K" id="qnf-cN-GnM"/>
+                        <outlet property="x_button" destination="juP-hS-EV7" id="oL5-MG-eTx"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Hva-Cs-j7b" userLabel="First Responder" sceneMemberID="firstResponder"/>
