@@ -15,17 +15,17 @@ import UIKit
 class sub_view_controller: UIViewController {
     
     
+
+
     
-    //////////
-    // Outlets
-    //////////
+    ///////////////////////// Outlets /////////////////////////
     @IBOutlet weak var label_text: UILabel!
     
     
     
-    //////////
-    // Actions
-    //////////
+
+    
+    ///////////////////////// Actions /////////////////////////
     @IBAction func x_button(sender: AnyObject) {
     }
     @IBAction func o_button(sender: AnyObject) {
