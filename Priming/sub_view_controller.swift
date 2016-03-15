@@ -10,8 +10,11 @@
 
 
 
+
 ////////////////////////////// Sub //////////////////////////////
 import UIKit
+import Foundation
+import SwiftCSV
 class sub_view_controller: UIViewController {
     
     
@@ -54,9 +57,59 @@ class sub_view_controller: UIViewController {
     
     
     
-    /////////
-    // Inputs
-    /////////
+    //////////
+    // Stimuli
+    //////////
+    var same_semantic_prime:Array<String> = []
+    var same_semantic_target:Array<String> = []
+    var similar_phone_prime:Array<String> = []
+    var similar_phone_target:Array<String> = []
+    var diff_prime:Array<String> = []
+    var diff_target:Array<String> = []
+    var fixation:String = "+"
+    
+    
+    
+    //////////
+    // Answers
+    //////////
+    var o_button_tf:Array<String> = []
+    var x_button_tf:Array<String> = []
+    
+    
+    
+    //////////////////////////////////////////////////
+    // Do any additional setup after loading the view.
+    //////////////////////////////////////////////////
+    override func viewDidLoad() {
+        
+        //// From main_view_controller
+        super.viewDidLoad()
+        // Re-distributing informations (heuristic indexing)
+        self.student_number = [String](passing_data.values)[1]
+        self.student_name = [String](passing_data.values)[4]
+        self.student_department = [String](passing_data.values)[3]
+        self.student_lecture = [String](passing_data.values)[2]
+        self.left_button = [String](passing_data.values)[0]
+        
+        //// Loading the stimuli
+        do {
+            // Reading input csv file from app bundle
+            //            let bundle = NSBundle.mainBundle()
+            //            let full_path = bundle.pathForResource("word_sets_ver2", ofType: "csv")
+            // Using SwiftCSV
+            let csv = try CSV(name: "/Users/KimWiback/Desktop/Priming/word_sets_ver2.csv")
+            self.same_semantic_prime = csv.columns["same_semantic_prime"]!
+            self.same_semantic_target = csv.columns["same_semantic_target"]!
+            self.similar_phone_prime = csv.columns["similar_phone_prime"]!
+            self.similar_phone_target = csv.columns["similar_phone_target"]!
+            self.diff_prime = csv.columns["diff_prime"]!
+            self.diff_target = csv.columns["diff_target"]!
+            // Error handling
+        } catch {
+        }
+    }
+    
     
     
     
@@ -71,11 +124,67 @@ class sub_view_controller: UIViewController {
     ///////////////
     @IBAction func start_button(sender: AnyObject) {
         
-        //// Hiding on start
-        // Outlets can be referenced without self instance.
-        start_button.hidden = true
-        o_button.hidden = true
-        x_button.hidden = true
+        
+        
+        ////////
+        // Timer
+        ////////
+        // Start after...
+        let start_interval = 0.0
+        // Pause inbetween labels...
+        let between_interval = 3.0
+        // This function executes a closure (second argument) after some delay (first argument).
+        func delay(delay:Double, closure:()->()) {
+            dispatch_after(
+                dispatch_time(
+                    DISPATCH_TIME_NOW,
+                    Int64(delay * Double(NSEC_PER_SEC))
+                ),
+                dispatch_get_main_queue(), closure)
+        }
+        
+        
+        
+        ////////////////////
+        // Main priming task
+        ////////////////////
+        
+        //// Main loop
+        for n in 0...self.same_semantic_prime.count - 1 {
+            // Double type transition (type sensitive)
+            let n = Double(n)
+            
+            //// Displaying
+            delay(start_interval + (n - 1) * between_interval){() -> () in self.label_text.text = self.fixation
+                self.start_button.hidden = true
+                self.o_button.hidden = true
+                self.x_button.hidden = true
+                self.label_text.hidden = false}
+            // Fixation 0.5 for every loop
+            delay(start_interval + (n - 1) * between_interval + 0.5){() -> () in self.label_text.text = self.same_semantic_prime[Int(n)]} // Int type transition (type sensitive)
+            // Giving 0.5 between prime & target
+            delay(start_interval + (n - 1) * between_interval + 1){() -> () in self.label_text.text = self.same_semantic_target[Int(n)]}
+            // User has 1.5 seconds to answer.
+            delay(start_interval + (n - 1) * between_interval + 1.5){() -> () in
+                self.o_button.hidden = false
+                self.x_button.hidden = false
+                self.label_text.hidden = true
+                // Run tic - toc.
+                self.start_time = NSDate.timeIntervalSinceReferenceDate()
+                // When the user fail to answer in time, do minus pedding.
+                self.x_button_tf.append(String(-1))
+                self.o_button_tf.append(String(-1))
+            }
+        }
+        
+        
+        
+        
+        
+        
+        
+        
+        
         
         //// 1. Send a request to server (Mailgun).
         let request: NSMutableURLRequest = NSMutableURLRequest(URL: NSURL(string: "https://api.mailgun.net/v3/sandbox15cbe9dbdda946eebdea18594ab7d313.mailgun.org/messages")!)
@@ -122,73 +231,6 @@ class sub_view_controller: UIViewController {
         
         //// 5. Finally, execute the task object.
         task.resume()
-        
-        
-        
-        
-        
-        
-        
-        
-        ////////
-        // Timer
-        ////////
-        // Start after...
-        let startingInterval = 0.5
-        // Pause inbetween labels...
-        let btwInterval = 0.7
-        
-        // This function executes a closure (second argument) after some delay (first argument).
-        func delay(delay:Double, closure:()->()) {
-            dispatch_after(
-                dispatch_time(
-                    DISPATCH_TIME_NOW,
-                    Int64(delay * Double(NSEC_PER_SEC))
-                ),
-                dispatch_get_main_queue(), closure)
-        }
-        
-        
-        
-        ////////////////////
-        // Main priming task
-        ////////////////////
-        
-        // Run tic - toc.
-        self.start_time = NSDate.timeIntervalSinceReferenceDate()
-        
-        //        let trialSet1:Array<String> = summedList[0] // which is 5
-        //
-        //        // wordListSet1[0] is "+". fixation point
-        //
-        //        delay(0){() -> () in self.wordLabel.text = wordListSet1[0]}
-        //
-        //        // m goes from 1 to 4
-        //        for m in 1...trialSet1.count-1 {
-        //
-        //            let times = Double(m)
-        //
-        //            delay(startingInterval+(times-1)*btwInterval){() -> () in self.wordLabel.text = trialSet1[m]}
-        //        }
-        //
-        //        delay(startingInterval+4*btwInterval){() -> () in
-        //            self.trueButton.hidden = false
-        //            self.falseButton.hidden = false
-        //            self.questionLabel.hidden = false
-        //            self.startTime = NSDate.timeIntervalSinceReferenceDate()
-        //        }
-        //
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
     }
     
     
@@ -199,7 +241,13 @@ class sub_view_controller: UIViewController {
     @IBAction func x_button(sender: AnyObject) {
         // Saving RT
         let x_pressed_moment = NSDate.timeIntervalSinceReferenceDate()
-        self.x_response_time = x_pressed_moment - start_time
+        self.x_response_time = x_pressed_moment - self.start_time
+        // Saving answers when pressed
+        self.x_button_tf.append(String(self.x_button.enabled))
+        // Preventing double click
+        self.x_button.hidden = true
+        self.o_button.hidden = true
+        self.label_text.hidden = false
     }
     
     
@@ -210,24 +258,13 @@ class sub_view_controller: UIViewController {
     @IBAction func o_button(sender: AnyObject) {
         // Saving RT
         let o_pressed_moment = NSDate.timeIntervalSinceReferenceDate()
-        self.o_response_time = o_pressed_moment - start_time
-    }
-    
-    
-    
-    //////////////////////////////////////////////////
-    // Do any additional setup after loading the view.
-    //////////////////////////////////////////////////
-    override func viewDidLoad() {
-        
-        //// From main_view_controller
-        super.viewDidLoad()
-        // Re-distributing informations (heuristic indexing)
-        self.student_number = [String](passing_data.values)[1]
-        self.student_name = [String](passing_data.values)[4]
-        self.student_department = [String](passing_data.values)[3]
-        self.student_lecture = [String](passing_data.values)[2]
-        self.left_button = [String](passing_data.values)[0]
+        self.o_response_time = o_pressed_moment - self.start_time
+        // Saving answers when pressed
+        self.o_button_tf.append(String(self.o_button.enabled))
+        // Preventing double click
+        self.x_button.hidden = true
+        self.o_button.hidden = true
+        self.label_text.hidden = false
     }
     
     

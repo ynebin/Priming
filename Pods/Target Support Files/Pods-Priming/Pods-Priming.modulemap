@@ -1,0 +1,6 @@
+framework module Pods_Priming {
+  umbrella header "Pods-Priming-umbrella.h"
+
+  export *
+  module * { export * }
+}
