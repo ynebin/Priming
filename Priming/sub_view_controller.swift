@@ -18,11 +18,23 @@ class sub_view_controller: UIViewController {
     
     
     
-    ///////////////////////// Outlets /////////////////////////
+    ///////////////////////// Settings /////////////////////////
+    
+    
+    
+    //////////
+    // Outlets
+    //////////
     @IBOutlet weak var label_text: UILabel!
     @IBOutlet weak var x_button: UIButton!
     @IBOutlet weak var o_button: UIButton!
     @IBOutlet weak var start_button: UIButton!
+    
+    
+    
+    /////////////////////
+    // Parameter settings
+    /////////////////////
     
     //// The dictionary came from main_view_controller
     var passing_data = [String: String]()
@@ -32,6 +44,19 @@ class sub_view_controller: UIViewController {
     var student_department:String?
     var student_lecture:String?
     var left_button:String?
+    
+    //// Tic - Toc
+    // Tic
+    var start_time:NSTimeInterval = 0
+    // Toc
+    var x_response_time:NSTimeInterval = 0
+    var o_response_time:NSTimeInterval = 0
+    
+    
+    
+    /////////
+    // Inputs
+    /////////
     
     
     
@@ -45,6 +70,12 @@ class sub_view_controller: UIViewController {
     // Start button
     ///////////////
     @IBAction func start_button(sender: AnyObject) {
+        
+        //// Hiding on start
+        // Outlets can be referenced without self instance.
+        start_button.hidden = true
+        o_button.hidden = true
+        x_button.hidden = true
         
         //// 1. Send a request to server (Mailgun).
         let request: NSMutableURLRequest = NSMutableURLRequest(URL: NSURL(string: "https://api.mailgun.net/v3/sandbox15cbe9dbdda946eebdea18594ab7d313.mailgun.org/messages")!)
@@ -91,6 +122,73 @@ class sub_view_controller: UIViewController {
         
         //// 5. Finally, execute the task object.
         task.resume()
+        
+        
+        
+        
+        
+        
+        
+        
+        ////////
+        // Timer
+        ////////
+        // Start after...
+        let startingInterval = 0.5
+        // Pause inbetween labels...
+        let btwInterval = 0.7
+        
+        // This function executes a closure (second argument) after some delay (first argument).
+        func delay(delay:Double, closure:()->()) {
+            dispatch_after(
+                dispatch_time(
+                    DISPATCH_TIME_NOW,
+                    Int64(delay * Double(NSEC_PER_SEC))
+                ),
+                dispatch_get_main_queue(), closure)
+        }
+        
+        
+        
+        ////////////////////
+        // Main priming task
+        ////////////////////
+        
+        // Run tic - toc.
+        self.start_time = NSDate.timeIntervalSinceReferenceDate()
+        
+        //        let trialSet1:Array<String> = summedList[0] // which is 5
+        //
+        //        // wordListSet1[0] is "+". fixation point
+        //
+        //        delay(0){() -> () in self.wordLabel.text = wordListSet1[0]}
+        //
+        //        // m goes from 1 to 4
+        //        for m in 1...trialSet1.count-1 {
+        //
+        //            let times = Double(m)
+        //
+        //            delay(startingInterval+(times-1)*btwInterval){() -> () in self.wordLabel.text = trialSet1[m]}
+        //        }
+        //
+        //        delay(startingInterval+4*btwInterval){() -> () in
+        //            self.trueButton.hidden = false
+        //            self.falseButton.hidden = false
+        //            self.questionLabel.hidden = false
+        //            self.startTime = NSDate.timeIntervalSinceReferenceDate()
+        //        }
+        //
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
     }
     
     
@@ -99,6 +197,9 @@ class sub_view_controller: UIViewController {
     // X button
     ///////////
     @IBAction func x_button(sender: AnyObject) {
+        // Saving RT
+        let x_pressed_moment = NSDate.timeIntervalSinceReferenceDate()
+        self.x_response_time = x_pressed_moment - start_time
     }
     
     
@@ -107,6 +208,9 @@ class sub_view_controller: UIViewController {
     // O button
     ///////////
     @IBAction func o_button(sender: AnyObject) {
+        // Saving RT
+        let o_pressed_moment = NSDate.timeIntervalSinceReferenceDate()
+        self.o_response_time = o_pressed_moment - start_time
     }
     
     
@@ -118,7 +222,7 @@ class sub_view_controller: UIViewController {
         
         //// From main_view_controller
         super.viewDidLoad()
-        // Distributing informations (heuristic indexing)
+        // Re-distributing informations (heuristic indexing)
         self.student_number = [String](passing_data.values)[1]
         self.student_name = [String](passing_data.values)[4]
         self.student_department = [String](passing_data.values)[3]
