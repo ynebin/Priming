@@ -26,11 +26,16 @@
 
 - ex) 클라이언트가 HTTP를 통하여 웹 서버로부터 웹페이지나</br> 그림 정보를 요청하면 서버는 이 요청에 응답하여 필요한 정보를</br> 해당 사용자에게 전달한다.
 
-###Alamofire
+###Alamofire (https://github.com/Alamofire/Alamofire)
+
 - Swift용 HTTP 네트워킹 라이브러리
 - HTTP request를 더욱 간략하게 작성할 수 있음
 
- [링크] https://github.com/Alamofire/Alamofire
+- #####HTTP → Alamofire
+<img src = "https://raw.githubusercontent.com/ynebin/Priming/master/Screenshots/HTTP.jpg" height="200">
+<img src = "https://raw.githubusercontent.com/ynebin/Priming/master/Screenshots/Alamofire.jpg" height="200">
+
+ 
 
 ###Mailgun
 
@@ -45,6 +50,7 @@
 ```
 
 <img src = "https://raw.githubusercontent.com/ynebin/Priming/master/Screenshots/Mailgun.jpg" height="200">
+ [이미지 출처] https://documentation.mailgun.com/quickstart-sending.html#how-to-start-sending-email
 
 ###HTTP request format
 1) Request Line: mailgun에 data 전송을 원한다는 request를 명시
